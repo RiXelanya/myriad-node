@@ -140,6 +140,21 @@ impl<T: Config> TippingInterface<T> for Pallet<T> {
 		Ok(tips_balance)
 	}
 
+	fn send_msg_tip(
+		sender: &T::AccountId,
+		receiver: &T::AccountId,
+		tips_balance_info: &Self::TipsBalanceInfo,
+		amount: &Self::Balance,
+		msg: &T::Hash,
+	) -> Result<Self::TipsBalance, Self::Error> {
+		let tip_amount = *amount;
+		let ft_identifier = tips_balance_info.get_ft_identifier();
+		let tips_balance = TipsBalance::new(tips_balance_info, amount);
+		Self::do_transfer(ft_identifier, sender, receiver, tip_amount)?;
+		Self::do_store_msg_tips_balance(&tips_balance, msg , false, None);
+		Ok(tips_balance)
+	}
+
 	fn claim_tip(
 		sender: &T::AccountId,
 		receiver: &T::AccountId,
