@@ -145,13 +145,14 @@ impl<T: Config> TippingInterface<T> for Pallet<T> {
 		receiver: &T::AccountId,
 		tips_balance_info: &Self::TipsBalanceInfo,
 		amount: &Self::Balance,
-		msg: &T::Hash,
+		msg: &mut T::Hash,
 	) -> Result<Self::TipsBalance, Self::Error> {
 		let tip_amount = *amount;
 		let ft_identifier = tips_balance_info.get_ft_identifier();
 		let tips_balance = TipsBalance::new(tips_balance_info, amount);
 		Self::do_transfer(ft_identifier, sender, receiver, tip_amount)?;
-		Self::do_store_msg_tips_balance(&tips_balance, msg , false, None);
+		Self::do_store_tips_balance(&tips_balance, false, None);
+		Self::do_store_message(msg, &tips_balance);
 		Ok(tips_balance)
 	}
 

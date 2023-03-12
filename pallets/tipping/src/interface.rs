@@ -37,6 +37,14 @@ pub trait TippingInterface<T: frame_system::Config> {
 		amount: &Self::Balance,
 	) -> Result<Self::TipsBalance, Self::Error>;
 
+	fn send_msg_tip(
+		sender: &T::AccountId,
+		receiver: &T::AccountId,
+		tips_balance_info: &Self::TipsBalanceInfo,
+		amount: &Self::Balance,
+		msg: &mut T::Hash,
+	) -> Result<Self::TipsBalance, Self::Error>;
+
 	fn claim_tip(
 		sender: &T::AccountId,
 		receiver: &T::AccountId,

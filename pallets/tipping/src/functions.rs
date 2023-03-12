@@ -133,6 +133,19 @@ impl<T: Config> Pallet<T> {
 		});
 	}
 
+	pub fn do_store_message(
+		msg : &mut T::Hash,
+		tips_balance: &TipsBalanceOf<T>,
+	) {
+		let key = tips_balance.key();
+		if MessagedTips::<T>::contains_key(&key) {
+			MessagedTips::<T>::set(key, Some(*msg))
+		}
+		else {
+			MessagedTips::<T>::insert(key, msg)
+		}
+	}
+
 	pub fn do_store_tips_balance(
 		tips_balance: &TipsBalanceOf<T>,
 		set_empty: bool,
@@ -173,52 +186,6 @@ impl<T: Config> Pallet<T> {
 			});
 		} else {
 			TipsBalanceByReference::<T>::insert(key, tips_balance);
-		}
-
-		total_tip
-	}
-
-	pub fn do_store_msg_tips_balance(
-		tips_balance: &TipsBalanceOf<T>,
-		msg: &T::Hash,
-		set_empty: bool,
-		tx_fee: Option<BalanceOf<T>>,
-	) -> BalanceOf<T> {
-		let key = tips_balance.key();
-		let amount = *tips_balance.get_amount();
-		let account_id = tips_balance.get_account_id();
-		let ft_identifier = tips_balance.get_ft_identifier();
-
-		//  Total tip that has been send and claim
-		let mut total_tip: BalanceOf<T> = amount;
-
-		if Self::can_update_balance(&key) {
-			MessagedTipsBalanceByReference::<T>::mutate(key, (|tips_balance| match tips_balance {
-				Some(tips_balance) => {
-					if set_empty {
-						tips_balance.set_amount(Zero::zero()); // Set balance to zero
-					} else if tx_fee.is_some() && ft_identifier == b"native" {
-						// Reduce user balance by the tx fee
-						// As user ask admin server to claim references
-						let current_balance = *tips_balance.get_amount();
-						let final_balance =
-							current_balance.saturating_sub(tx_fee.unwrap()).saturating_add(amount);
-						tips_balance.set_amount(final_balance);
-						total_tip = final_balance;
-					} else {
-						// There is an increase in balance
-						tips_balance.add_amount(amount);
-					}
-
-					// Claim tips balance by account_id
-					if account_id.is_some() {
-						tips_balance.set_account_id(account_id.as_ref().unwrap());
-					}
-				},
-				None => (),
-			}, msg));
-		} else {
-			MessagedTipsBalanceByReference::<T>::insert(key, (tips_balance, msg));
 		}
 
 		total_tip

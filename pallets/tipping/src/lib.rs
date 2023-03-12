@@ -77,8 +77,8 @@ pub mod pallet {
 	>;
 	
 	#[pallet::storage]
-	#[pallet::getter(fn messaged_tips_balance_by_reference)]
-	pub(super) type MessagedTipsBalanceByReference<T: Config> = StorageNMap<
+	#[pallet::getter(fn messaged_tips)]
+	pub(super) type MessagedTips<T: Config> = StorageNMap<
 		_,
 		(
 			NMapKey<Blake2_128Concat, ServerIdOf<T>>,
@@ -86,7 +86,7 @@ pub mod pallet {
 			NMapKey<Blake2_128Concat, ReferenceId>,
 			NMapKey<Blake2_128Concat, FtIdentifier>,
 		),
-		(TipsBalanceOf<T>, T::Hash),
+		T::Hash,
 	>;
 
 	#[pallet::storage]
@@ -232,14 +232,14 @@ pub mod pallet {
 			origin: OriginFor<T>,
 			info: TipsBalanceInfoOf<T>,
 			amount: BalanceOf<T>,
-			msg: T::Hash
+			mut msg: T::Hash
 		) -> DispatchResultWithPostInfo {
 			let sender = ensure_signed(origin)?;
 			let receiver = Self::tipping_account_id();
 
 			ensure!(info.get_reference_type() != b"unlockable_content", Error::<T>::Unauthorized);
 
-			let data = <Self as TippingInterface<T>>::send_msg_tip(&sender, &receiver, &info, &amount, &msg)?;
+			let data = <Self as TippingInterface<T>>::send_msg_tip(&sender, &receiver, &info, &amount, &mut msg)?;
 
 			Self::deposit_event(Event::SendTip { from: sender, to: receiver, tips_balance: data });
 			Ok(().into())
