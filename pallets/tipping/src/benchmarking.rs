@@ -121,6 +121,31 @@ benchmarks! {
 		);
 	}: _(RawOrigin::Signed(caller), tips_balance_info, amount)
 
+	send_msg_tip {
+		// Initial account
+		let caller: T::AccountId = whitelisted_caller();
+		let server_id: T::AccountId = account("server_account", 0, SEED);
+
+		// Default balance
+		let balance = 1_000_000_000_000_000_000_000u128.saturated_into(); // 1000 MYRIA
+		let amount = 1_000_000_000_000_000_000u128.saturated_into(); // 1 MYRIA
+
+		// Caller initial balance
+		let _ = <T as Config>::Currency::deposit_creating(&caller, balance);
+		let mut msg = T::Hash::random();
+
+		// Send tip
+		let reference_id = b"people_id".to_vec();
+		let reference_type = b"people".to_vec();
+		let ft_identifier = b"native".to_vec();
+		let tips_balance_info = TipsBalanceInfo::new(
+			&server_id,
+			&reference_type,
+			&reference_id,
+			&ft_identifier
+		);
+	}: _(RawOrigin::Signed(caller), tips_balance_info, amount, msg)
+
 	claim_reference {
 		// Initial account
 		let caller: T::AccountId = whitelisted_caller();
