@@ -6,6 +6,7 @@ use super::*;
 use crate::{Config, Pallet as Tipping, TippingInterface};
 use frame_benchmarking::{account, benchmarks, impl_benchmark_test_suite, whitelisted_caller};
 use frame_support::{sp_runtime::SaturatedConversion, traits::Currency};
+use frame_support::sp_runtime::traits::Hash;
 use frame_system::RawOrigin;
 use sp_std::vec;
 
@@ -132,7 +133,7 @@ benchmarks! {
 
 		// Caller initial balance
 		let _ = <T as Config>::Currency::deposit_creating(&caller, balance);
-		let mut msg = T::Hash::random();
+		let mut msg = T::Hashing::hash(b"thank you");
 
 		// Send tip
 		let reference_id = b"people_id".to_vec();
