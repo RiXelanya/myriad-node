@@ -23,20 +23,20 @@ jobs:
     name: OpenSSF Scorecards
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac
       - name: Analize
-        uses: ossf/scorecard-action@e38b1902ae4f44df626f11ba0734b14fb91f8f86
+        uses: ossf/scorecard-action@08b4669551908b1024bb425080c797723083c031
         with:
           results_file: results.sarif
           results_format: sarif
           publish_results: true
       - name: Upload Result to Artifact
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32
         with:
           name: SARIF file
           path: results.sarif
           retention-days: 5
       - name: Upload Result to Code-Scanning
-        uses: github/codeql-action/upload-sarif@168b99b3c22180941ae7dbdd5f5c9678ede476ba
+        uses: github/codeql-action/upload-sarif@cdcdbb579706841c47f7063dda365e292e5cad7a
         with:
           sarif_file: results.sarif

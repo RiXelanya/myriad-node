@@ -2350,9 +2350,9 @@ dependencies = [
 
 [[package]]
 name = "h2"
-version = "0.3.15"
+version = "0.3.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5f9f29bc9dda355256b2916cf526ab02ce0aeaaaf2bad60d65ef3f12f11dd0f4"
+checksum = "66b91535aa35fea1523ad1b86cb6b53c28e0ae566ba4a460f4457e936cad7c6f"
 dependencies = [
  "bytes",
  "fnv",
@@ -3965,7 +3965,7 @@ dependencies = [
 
 [[package]]
 name = "myriad"
-version = "2.3.5"
+version = "2.3.6"
 dependencies = [
  "beefy-gadget",
  "beefy-gadget-rpc",
@@ -4027,7 +4027,7 @@ dependencies = [
 
 [[package]]
 name = "myriad-runtime"
-version = "2.3.5"
+version = "2.3.6"
 dependencies = [
  "beefy-merkle-tree",
  "beefy-primitives",
@@ -4816,7 +4816,7 @@ dependencies = [
 
 [[package]]
 name = "pallet-server"
-version = "2.3.5"
+version = "2.3.6"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -4926,7 +4926,7 @@ dependencies = [
 
 [[package]]
 name = "pallet-tipping"
-version = "2.3.5"
+version = "2.3.6"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -8856,7 +8856,7 @@ version = "1.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97fee6b57c6a41524a810daee9286c02d7752c4253064d0b05472833a438f675"
 dependencies = [
- "cfg-if 1.0.0",
+ "cfg-if 0.1.10",
  "digest 0.10.6",
  "rand 0.8.5",
  "static_assertions",
@@ -9371,9 +9371,9 @@ dependencies = [
 
 [[package]]
 name = "webpki"
-version = "0.22.0"
+version = "0.22.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f095d78192e208183081cc07bc5515ef55216397af48b873e5edcd72637fa1bd"
+checksum = "f0e74f82d49d545ad128049b7e88f6576df2da6b02e9ce565c6f533be576957e"
 dependencies = [
  "ring",
  "untrusted",

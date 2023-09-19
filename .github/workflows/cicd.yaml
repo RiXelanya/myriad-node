@@ -30,7 +30,7 @@ jobs:
     name: Test on nightly-2022-07-24 ( ${{ matrix.command }} )
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac
         with:
           fetch-depth: 0
       - name: Install protobuf-compiler
@@ -45,7 +45,7 @@ jobs:
           override: true
           default: true
       - name: Rust Cache
-        uses: Swatinem/rust-cache@6fd3edff6979b79f87531400ad694fb7f2c84b1f
+        uses: Swatinem/rust-cache@a95ba195448af2da9b00fb742d14ffaaf3c21f43
       - name: Run cargo ${{ matrix.command }}
         run: cargo ${{ matrix.command }}
 
@@ -55,7 +55,7 @@ jobs:
     name: Build
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac
         with:
           fetch-depth: 0
       - name: Install protobuf-compiler
@@ -70,7 +70,7 @@ jobs:
           override: true
           default: true
       - name: Rust Cache
-        uses: Swatinem/rust-cache@6fd3edff6979b79f87531400ad694fb7f2c84b1f
+        uses: Swatinem/rust-cache@a95ba195448af2da9b00fb742d14ffaaf3c21f43
       - name: Run cargo build
         run: cargo build --release --locked
       - name: Copy binnary file
@@ -83,21 +83,21 @@ jobs:
           embed-description: Build success on commit sha ${{ github.sha }}
           filename: ./target/release/wbuild/myriad-runtime/myriad_runtime.compact.compressed.wasm
       - name: Set Up QEMU
-        uses: docker/setup-qemu-action@e81a89b1732b9c48d79cd809d8d81d79c4647a18
+        uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3
       - name: Set Up Docker Buildx
         id: set-up-buildx
-        uses: docker/setup-buildx-action@4b4e9c3e2d4531116a6f8ba8e71fc6e2cb6e6c8c
+        uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226
         with:
           install: true
       - name: Cache Docker Layers
-        uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
       - name: Build Docker
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09
         with:
           builder: ${{ steps.set-up-buildx.outputs.name }}
           cache-from: type=local,src=/tmp/.buildx-cache
@@ -111,7 +111,7 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
       - name: Upload Build to Artifact
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32
         with:
           name: build_${{ github.sha }}
           path: |
@@ -125,7 +125,7 @@ jobs:
     name: Release Please
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac
         with:
           fetch-depth: 0
       - name: Compute Version
@@ -143,7 +143,7 @@ jobs:
           echo "semver=$MAJOR.$MINOR.$PATCH" >> $GITHUB_OUTPUT
       - name: Release
         id: release
-        uses: google-github-actions/release-please-action@e0b9d1885d92e9a93d5ce8656de60e3b806e542c
+        uses: google-github-actions/release-please-action@ca6063f4ed81b55db15b8c42d1b6f7925866342d
         with:
           token: ${{ secrets.PAT }}
           fork: true
@@ -164,7 +164,7 @@ jobs:
     name: Publish Docker
     steps:
       - name: Login to DockerHub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
